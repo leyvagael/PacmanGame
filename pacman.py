@@ -2,16 +2,11 @@
 
 Exercises
 
-(Emma)
-1. Change the board.
-(Leyva)
-2. Change the number of ghosts.
-(Leyva)
-3. Change where pacman starts.
-(Emma)
-4. Make the ghosts faster/slower.
-(Leyva)
-5. Make the ghosts smarter.
+1. Change the board. #DONE
+2. Change the number of ghosts. #DONE
+3. Change where pacman starts. #DONE
+4. Make the ghosts faster/slower. #DONE
+5. Make the ghosts smarter. #DONE
 """
 
 from random import choice
@@ -23,12 +18,12 @@ state = {'score': 0}
 path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
-pacman = vector(-40, -80)
 ghosts = [
     [vector(-180, 160), vector(5, 0)],
     [vector(-180, -160), vector(0, 5)],
     [vector(100, 160), vector(0, -5)],
     [vector(100, -160), vector(-5, 0)],
+    [vector(-40, -80), vector(5,0)]
 ]
 # fmt: off
 board1 = [
@@ -104,6 +99,11 @@ board3 = [
 boards = [board1, board2, board3]
 
 tiles = choice(boards)
+valid_starts = [
+    vector((i % 20) * 20 - 200, 180 - (i // 20) * 20)
+    for i in range(len(tiles)) if tiles[i] == 1
+]
+pacman = choice(valid_starts).copy()
 
 def square(x, y):
     """Draw square using path at (x, y)."""
@@ -194,14 +194,26 @@ def move():
                 vector(0, 8),
                 vector(0, -8),
             ]
-            plan = choice(options)
-            course.x = plan.x
-            course.y = plan.y
-
+            distance = vector(pacman.x - point.x, pacman.y - point.y)
+            if abs(distance.x) > abs(distance.y):
+                preferred = options[0] if distance.x > 0 else options[1]
+            else:
+                preferred = options[2] if distance.y > 0 else options[3]
+ 
+            if valid(point + preferred):
+                course.x = preferred.x
+                course.y = preferred.y
+            else:
+                fallbacks = [o for o in options if valid(point + o)]
+                if fallbacks:
+                    plan = choice(fallbacks)
+                    course.x = plan.x
+                    course.y = plan.y
+ 
         up()
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
-
+ 
     update()
 
     for point, course in ghosts:
