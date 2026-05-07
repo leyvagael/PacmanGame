@@ -140,14 +140,26 @@ def move():
                 vector(0, 5),
                 vector(0, -5),
             ]
-            plan = choice(options)
-            course.x = plan.x
-            course.y = plan.y
-
+            distance = vector(pacman.x - point.x, pacman.y - point.y)
+            if abs(distance.x) > abs(distance.y):
+                preferred = options[0] if distance.x > 0 else options[1]
+            else:
+                preferred = options[2] if distance.y > 0 else options[3]
+ 
+            if valid(point + preferred):
+                course.x = preferred.x
+                course.y = preferred.y
+            else:
+                fallbacks = [o for o in options if valid(point + o)]
+                if fallbacks:
+                    plan = choice(fallbacks)
+                    course.x = plan.x
+                    course.y = plan.y
+ 
         up()
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
-
+ 
     update()
 
     for point, course in ghosts:
