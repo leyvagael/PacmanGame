@@ -3,7 +3,7 @@
 Exercises
 
 1. Change the board. #TODO
-2. Change the number of ghosts. #TODO
+2. Change the number of ghosts. #DONE
 3. Change where pacman starts. #DONE
 4. Make the ghosts faster/slower. #TODO
 5. Make the ghosts smarter. #DONE
@@ -23,6 +23,7 @@ ghosts = [
     [vector(-180, -160), vector(0, 5)],
     [vector(100, 160), vector(0, -5)],
     [vector(100, -160), vector(-5, 0)],
+    [vector(-40, -80), vector(5,0)]
 ]
 # fmt: off
 tiles = [
