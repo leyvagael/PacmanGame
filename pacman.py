@@ -2,11 +2,11 @@
 
 Exercises
 
-1. Change the board.
-2. Change the number of ghosts.
-3. Change where pacman starts.
-4. Make the ghosts faster/slower.
-5. Make the ghosts smarter.
+1. Change the board. #TODO
+2. Change the number of ghosts. #TODO
+3. Change where pacman starts. #DONE
+4. Make the ghosts faster/slower. #TODO
+5. Make the ghosts smarter. #DONE
 """
 
 from random import choice
@@ -18,7 +18,6 @@ state = {'score': 0}
 path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
-pacman = vector(-40, -80)
 ghosts = [
     [vector(-180, 160), vector(5, 0)],
     [vector(-180, -160), vector(0, 5)],
@@ -49,7 +48,11 @@ tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ]
 # fmt: on
-
+valid_starts = [
+    vector((i % 20) * 20 - 200, 180 - (i // 20) * 20)
+    for i in range(len(tiles)) if tiles[i] == 1
+]
+pacman = choice(valid_starts).copy()
 
 def square(x, y):
     """Draw square using path at (x, y)."""
